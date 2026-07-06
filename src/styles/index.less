@@ -1,0 +1,145 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; /* 彻底锁死外层视口滚动 */
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+  background: #03080d;
+}
+
+.panel-stack {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.screen-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 16px;
+}
+
+.screen-metric {
+  min-width: 0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(117, 210, 202, 0.14);
+}
+
+.screen-metric__label {
+  display: block;
+  color: rgba(217, 246, 242, 0.62);
+  font-size: 12px;
+  line-height: 1;
+}
+
+.screen-metric__value {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-top: 8px;
+  color: #efffff;
+  font-size: 24px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.screen-metric__unit {
+  color: rgba(227, 252, 250, 0.64);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.screen-metric__trend {
+  margin-left: auto;
+  color: #49d68f;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.screen-section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(239, 255, 255, 0.9);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.screen-section-title::before {
+  width: 6px;
+  height: 6px;
+  content: '';
+  background: #e5b14b;
+  box-shadow: 0 0 10px rgba(229, 177, 75, 0.62);
+}
+
+.screen-progress-list,
+.screen-event-list {
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.screen-progress {
+  display: grid;
+  grid-template-columns: 86px minmax(0, 1fr) 44px;
+  gap: 10px;
+  align-items: center;
+  color: rgba(227, 252, 250, 0.78);
+  font-size: 12px;
+}
+
+.screen-progress__track {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(148, 203, 199, 0.12);
+}
+
+.screen-progress__bar {
+  width: var(--value);
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #49d68f, #64f0dc);
+}
+
+.screen-progress__value {
+  color: #e5b14b;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.screen-event {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  color: rgba(227, 252, 250, 0.76);
+  font-size: 12px;
+}
+
+.screen-event__level {
+  width: 42px;
+  color: #64f0dc;
+}
+
+.screen-event__text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.screen-event__time {
+  color: rgba(229, 177, 75, 0.84);
+  font-variant-numeric: tabular-nums;
+}

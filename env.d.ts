@@ -1,4 +1,11 @@
 /// <reference types="vite/client" />
+
+declare module '*.vue' {
+  import type { DefineComponent } from 'vue'
+  const component: DefineComponent<Record<string, unknown>, Record<string, unknown>, unknown>
+  export default component
+}
+
 interface Window {
   s: any // 或者指定具体类型，比如 string、number 等
   h: any

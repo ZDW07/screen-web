@@ -1,7 +1,7 @@
 <template>
   <div :class="['screen-layout', `screen-layout--${uiStore.layoutMode}`]">
     <ScreenPanelColumn side="left" :panels="panelStore.leftPanels" />
-    <CenterStage></CenterStage>
+    <CenterStage><cesiumThreeCom /></CenterStage>
     <ScreenPanelColumn side="right" :panels="panelStore.rightPanels" />
   </div>
 </template>
@@ -11,7 +11,7 @@ import CenterStage from '@/components/screen/CenterStage.vue'
 import ScreenPanelColumn from '@/components/screen/ScreenPanelColumn.vue'
 import { usePanelStore } from '@/stores/modules/panel'
 import { useUIStore } from '@/stores/modules/ui'
-// import cesiumThreeCom from '@/cesiumThreeCom/cesiumThreeCom.vue'
+import cesiumThreeCom from '@/cesiumThreeCom/cesiumThreeCom.vue'
 const panelStore = usePanelStore()
 const uiStore = useUIStore()
 </script>

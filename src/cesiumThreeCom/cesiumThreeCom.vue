@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%; height: 100%" ref="mainBoxRef" class="cimBox map-box" id="three"></div>
+  <div ref="mainBoxRef" class="map-box" id="three"></div>
 </template>
 
 <script setup>
@@ -12,18 +12,36 @@ import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 const ENGINE_URL = 'https://192.168.0.45:8192/static/eryuan'
-let mainBoxRef = ref()
+const mainBoxRef = ref()
 
 // 定义 Three.js 的全局变量，方便后续维护或销毁
 let scene, camera, renderer, controls, animationFrameId
+let resizeObserver
+
+function getContainerSize() {
+  const dom = mainBoxRef.value
+  if (!dom) return { width: 1, height: 1 }
+
+  return {
+    width: dom.clientWidth || 1,
+    height: dom.clientHeight || 1,
+  }
+}
+
+function resizeRenderer() {
+  if (!camera || !renderer) return
+
+  const { width, height } = getContainerSize()
+  camera.aspect = width / height
+  camera.updateProjectionMatrix()
+  renderer.setSize(width, height, false)
+}
 
 function getMap() {
-  const dom = document.getElementById('three')
-  const appDom = document.getElementById('app')
+  const dom = mainBoxRef.value
   if (!dom) return
 
-  const width = appDom.clientWidth || window.innerWidth
-  const height = appDom.clientHeight || window.innerHeight
+  const { width, height } = getContainerSize()
 
   // 1. 创建场景 (Scene)
   scene = new THREE.Scene()
@@ -35,12 +53,13 @@ function getMap() {
 
   // 3. 创建渲染器 (Renderer) 并开启阴影
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
-  renderer.setSize(width, height)
+  renderer.setSize(width, height, false)
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
   renderer.shadowMap.enabled = true // 开启阴影
   renderer.shadowMap.type = THREE.PCFSoftShadowMap
   renderer.toneMapping = THREE.ACESFilmicToneMapping // 提升 HDR 色调映射效果
   renderer.toneMappingExposure = 1.0
+  renderer.domElement.className = 'map-canvas'
   dom.appendChild(renderer.domElement)
 
   // 4. 添加轨道控制器 (Controls) 用于鼠标拖拽旋转和缩放
@@ -106,37 +125,28 @@ function getMap() {
   window.EngineScene = scene
 }
 
-nextTick(() => {
-  getMap()
-})
-
 onMounted(() => {
-  // 保持画布对窗口大小的自适应
-  mainBoxRef.value.style.width = window.innerWidth + 'px'
-  mainBoxRef.value.style.height = window.innerHeight + 'px'
+  nextTick(() => {
+    getMap()
 
-  window.addEventListener('resize', onWindowResize)
+    if (window.ResizeObserver && mainBoxRef.value) {
+      resizeObserver = new ResizeObserver(resizeRenderer)
+      resizeObserver.observe(mainBoxRef.value)
+    }
+
+    window.addEventListener('resize', onWindowResize)
+  })
 })
 
 // 提取 Resize 回调，方便销毁
 function onWindowResize() {
-  if (!mainBoxRef.value) return
-  const width = window.innerWidth
-  const height = window.innerHeight
-
-  mainBoxRef.value.style.width = width + 'px'
-  mainBoxRef.value.style.height = height + 'px'
-
-  if (camera && renderer) {
-    camera.aspect = width / height
-    camera.updateProjectionMatrix()
-    renderer.setSize(width, height)
-  }
+  resizeRenderer()
 }
 
 // 组件销毁时清除定时器与事件，防止内存泄漏
 onBeforeUnmount(() => {
   window.removeEventListener('resize', onWindowResize)
+  if (resizeObserver) resizeObserver.disconnect()
   if (animationFrameId) cancelAnimationFrame(animationFrameId)
   if (renderer) {
     renderer.dispose()
@@ -146,8 +156,19 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped lang="less">
-.cimBox.map-box {
+.map-box {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   overflow: hidden;
+
+  :deep(.map-canvas) {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
   :deep(.el-loading-mask) {
     background-color: black;
     opacity: 0.75;

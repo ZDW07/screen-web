@@ -62,7 +62,7 @@ const summary = [
 
 function openDetail() {
   if (!props.slotId) return
-  panelStore.switchPanel(props.slotId, 'security-detail')
+  panelStore.switchPanel(props.slotId, 'test')
 }
 </script>
 

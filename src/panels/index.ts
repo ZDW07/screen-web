@@ -87,6 +87,17 @@ export const panels: PanelMeta[] = [
     component: () => import('@/views/panels/EnergyPanel.vue'),
     keepAlive: true,
   },
+  {
+    id: 'test',
+    label: '测试',
+    title: '测试1',
+    subtitle: '1',
+    side: 'right',
+    order: 20,
+    span: 1,
+    component: () => import('@/views/panels/testPanel.vue'),
+    keepAlive: true,
+  },
 ]
 
 /** 按 ID 索引 */

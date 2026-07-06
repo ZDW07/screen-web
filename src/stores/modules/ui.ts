@@ -13,7 +13,7 @@ export const useUIStore = defineStore('ui', () => {
   const fullscreen = ref(false)
 
   /** 大屏主体布局模式：overlay 为中心底层、左右覆盖；column 为普通三栏 */
-  const layoutMode = ref<ScreenLayoutMode>('overlay')
+  const layoutMode = ref<ScreenLayoutMode>('column')
 
   /** 当前时间 */
   const now = ref(new Date())

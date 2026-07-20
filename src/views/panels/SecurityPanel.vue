@@ -34,7 +34,7 @@
 <script setup lang="ts">
 import { usePanelStore } from '@/stores/modules/panel'
 import type { PanelId } from '@/panels/types'
-
+import gsap from 'gsap'
 defineOptions({ name: 'security' })
 
 const props = defineProps<{

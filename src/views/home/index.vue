@@ -3,8 +3,8 @@
     <ScreenPanelColumn side="left" :panels="panelStore.leftPanels" />
     <CenterStage>
       <!-- <testPanel /> -->
-      <!-- <testUi /> -->
-      <cesiumThreeCom />
+      <testUi />
+      <!-- <cesiumThreeCom /> -->
     </CenterStage>
     <ScreenPanelColumn side="right" :panels="panelStore.rightPanels" />
   </div>
